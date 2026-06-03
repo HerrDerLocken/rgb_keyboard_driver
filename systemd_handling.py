@@ -12,7 +12,7 @@ Description=keyboard rgb controller service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /home/jakob/Dokumente/Programmieren/Python/keyboard_light/main.py
+ExecStart=
 Restart=on-failure
 
 [Install]
