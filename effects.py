@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--verbose", action="store_true")
 parser.add_argument("--interval", type=int, default=1)
 parser.add_argument("--file", type=str, default="/sys/devices/platform/tuxedo_keyboard/leds/rgb:kbd_backlight/multi_intensity")
-parser.add_argument("--delay", type=float, default=0.01)
+parser.add_argument("--delay", type=float, default=0.05)
 args = parser.parse_args()
 
 class AsyncColorWriter:
@@ -15,7 +15,7 @@ class AsyncColorWriter:
         self.filepath = filepath
         self.verbose = verbose
         self.currentcolor = None
-        self.lock = threading.lock()
+        self.lock = threading.Lock()
         self.running= True
 
         try:
@@ -27,7 +27,7 @@ class AsyncColorWriter:
         self.thread = threading.Thread(target=self._write_loop, daemon=True)
         self.thread.start()
 
-    def setColor(self, color: list[int]):
+    def set_color(self, color: list[int]):
         with self.lock:
             self.currentcolor = list(color)
     
@@ -41,7 +41,7 @@ class AsyncColorWriter:
 
             if color_to_write:
                 try:
-                    color_str = ''.join(map(str, color_to_write)) + '\n'
+                    color_str = ' '.join(map(str, color_to_write)) + '\n'
                     if self.verbose:
                         print(f"Writing physically: {color_str.strip()}")
                     
